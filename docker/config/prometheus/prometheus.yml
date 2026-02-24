@@ -1,0 +1,261 @@
+global:
+  scrape_interval: 30s
+  scrape_timeout: 5s
+  evaluation_interval: 10s
+
+storage:
+  tsdb:
+    retention:
+      time: 5y
+      size: 80GB
+
+alerting:
+  alertmanagers:
+    - file_sd_configs:
+        - files:
+            - /etc/prometheus/sd-alertmanager.yml
+
+scrape_configs:
+  - job_name: prometheus
+    basic_auth:
+      username: admin
+      password: password
+    static_configs:
+      - targets:
+          - prometheus:9090
+
+  - job_name: node-exporter
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/sd-node-exporter.yml
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: '([^:]+):(\d+):(.*)'
+        target_label: instance
+        replacement: "${3}"
+      - source_labels: [__address__]
+        regex: '([^:]+):(\d+):(.*)'
+        target_label: __address__
+        replacement: "${1}:${2}"
+    metric_relabel_configs:
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;.+$"
+        target_label: qtype_name
+        replacement: Other
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;1$"
+        target_label: qtype_name
+        replacement: A
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;2$"
+        target_label: qtype_name
+        replacement: NS
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;5$"
+        target_label: qtype_name
+        replacement: CNAME
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;6$"
+        target_label: qtype_name
+        replacement: SOA
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;12$"
+        target_label: qtype_name
+        replacement: PTR
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;15$"
+        target_label: qtype_name
+        replacement: MX
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;16$"
+        target_label: qtype_name
+        replacement: TXT
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;17$"
+        target_label: qtype_name
+        replacement: RP
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;18$"
+        target_label: qtype_name
+        replacement: AFSDB
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;24$"
+        target_label: qtype_name
+        replacement: SIG
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;25$"
+        target_label: qtype_name
+        replacement: KEY
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;28$"
+        target_label: qtype_name
+        replacement: AAAA
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;29$"
+        target_label: qtype_name
+        replacement: LOC
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;33$"
+        target_label: qtype_name
+        replacement: SRV
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;35$"
+        target_label: qtype_name
+        replacement: NAPTR
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;36$"
+        target_label: qtype_name
+        replacement: KX
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;37$"
+        target_label: qtype_name
+        replacement: CERT
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;39$"
+        target_label: qtype_name
+        replacement: DNAME
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;41$"
+        target_label: qtype_name
+        replacement: OPT
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;42$"
+        target_label: qtype_name
+        replacement: APL
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;43$"
+        target_label: qtype_name
+        replacement: DS
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;44$"
+        target_label: qtype_name
+        replacement: SSHFP
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;45$"
+        target_label: qtype_name
+        replacement: IPSECKEY
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;46$"
+        target_label: qtype_name
+        replacement: RRSIG
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;47$"
+        target_label: qtype_name
+        replacement: NSEC
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;48$"
+        target_label: qtype_name
+        replacement: DNSKEY
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;49$"
+        target_label: qtype_name
+        replacement: DHCID
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;50$"
+        target_label: qtype_name
+        replacement: NSEC3
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;51$"
+        target_label: qtype_name
+        replacement: NSEC3PARAM
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;52$"
+        target_label: qtype_name
+        replacement: TLSA
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;55$"
+        target_label: qtype_name
+        replacement: HIP
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;59$"
+        target_label: qtype_name
+        replacement: CDS
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;60$"
+        target_label: qtype_name
+        replacement: CDNSKEY
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;64$"
+        target_label: qtype_name
+        replacement: SVCB
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;65$"
+        target_label: qtype_name
+        replacement: HTTPS
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;249$"
+        target_label: qtype_name
+        replacement: TKEY
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;250$"
+        target_label: qtype_name
+        replacement: TSIG
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;251$"
+        target_label: qtype_name
+        replacement: IXFR
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;252$"
+        target_label: qtype_name
+        replacement: AXFR
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;255$"
+        target_label: qtype_name
+        replacement: ANY
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;257$"
+        target_label: qtype_name
+        replacement: CAA
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;32768$"
+        target_label: qtype_name
+        replacement: TA
+      - source_labels: [__name__, qtype]
+        regex: "^dsc_.*;32769$"
+        target_label: qtype_name
+        replacement: DLV
+
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;.+$"
+        target_label: rcode_name
+        replacement: Other
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;0$"
+        target_label: rcode_name
+        replacement: NOERROR
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;1$"
+        target_label: rcode_name
+        replacement: FORMERR
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;2$"
+        target_label: rcode_name
+        replacement: SERVFAIL
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;3$"
+        target_label: rcode_name
+        replacement: NXDOMAIN
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;4$"
+        target_label: rcode_name
+        replacement: NOTIMP
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;5$"
+        target_label: rcode_name
+        replacement: REFUSED
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;6$"
+        target_label: rcode_name
+        replacement: YXDOMAIN
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;7$"
+        target_label: rcode_name
+        replacement: XRRSET
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;8$"
+        target_label: rcode_name
+        replacement: NOTAUTH
+      - source_labels: [__name__, rcode]
+        regex: "^dsc_.*;9$"
+        target_label: rcode_name
+        replacement: NOTZONE

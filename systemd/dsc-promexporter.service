@@ -1,0 +1,17 @@
+[Unit]
+Description=Generate DSC Prometheus metrics
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/dsc-promexporter.sh
+TimeoutStartSec=8s
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+NoNewPrivileges=yes

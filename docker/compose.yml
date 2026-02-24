@@ -1,0 +1,60 @@
+services:
+  grafana:
+    image: grafana/grafana-enterprise:latest
+    container_name: grafana
+    ports:
+      - ${GRAFANA_PORT:-3000}:3000
+    volumes:
+      - grafana_storage:/var/lib/grafana
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+      - ./config/grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      GF_DEFAULT_INSTANCE_NAME: grafana
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-password}
+      GF_SECURITY_ADMIN_EMAIL: ${GRAFANA_ADMIN_EMAIL:-admin@example.invalid}
+      GF_PLUGINS_PREINSTALL: ${GRAFANA_PLUGINS}
+      GF_FEATURE_TOGGLES_ENABLE: ${GRAFANA_FEATURE_TOGGLES_ENABLE}
+      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_CALLBACK_URL: http://grafana:${GRAFANA_PORT:-3000}/
+      GF_RENDERING_RENDERER_TOKEN: ${RENDERER_TOKEN:-renderertoken}
+    depends_on:
+      - renderer
+    restart: always
+
+  renderer:
+    image: grafana/grafana-image-renderer:latest
+    container_name: renderer
+    volumes:
+      - ./config/renderer/config.yml:/home/nonroot/config.yml
+    environment:
+      AUTH_TOKEN: ${RENDERER_TOKEN:-renderertoken}
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:main-distroless
+    container_name: prometheus
+    ports:
+      - ${PROMETHEUS_PORT:-9090}:9090
+    volumes:
+      - ./config/prometheus/:/etc/prometheus/
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--web.config.file=/etc/prometheus/web.yml"
+    restart: always
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    ports:
+      - ${ALERTMANAGER_PORT:-9093}:9093
+    volumes:
+      - ./config/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager-data:/data
+    restart: always
+
+volumes:
+  grafana_storage:
+  prometheus-data:
+  alertmanager-data:

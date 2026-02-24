@@ -1,0 +1,3 @@
+# htpasswd -nBC 10 ""
+basic_auth_users:
+  admin: $..$10$.....................

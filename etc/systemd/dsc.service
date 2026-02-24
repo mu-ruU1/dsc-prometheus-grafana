@@ -1,0 +1,20 @@
+[Unit]
+Description=DNS Statistics Collector (DSC)
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+ExecStart=/usr/bin/dsc -f /etc/dsc/dsc.conf
+
+Restart=on-failure
+RestartSec=5s
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

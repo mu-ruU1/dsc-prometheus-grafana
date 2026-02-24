@@ -1,0 +1,11 @@
+[Unit]
+Description=Run dsc-datatool every 10 seconds
+
+[Timer]
+OnBootSec=10s
+OnUnitActiveSec=10s
+AccuracySec=1s
+Persistent=false
+
+[Install]
+WantedBy=timers.target
