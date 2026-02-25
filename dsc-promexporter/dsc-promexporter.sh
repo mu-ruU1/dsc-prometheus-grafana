@@ -41,10 +41,11 @@ qr_aa_bits"
 
 cleanup() {
   rm -f "$TMP"
+  find "$DSC_DIR" -name '*.xml' -mmin +60 -delete
 }
 trap cleanup EXIT
 
-dsc-datatool \
+/usr/local/bin/dsc-datatool \
   -x "$LATEST" \
   -s "$SERVER" \
   -n "$NODE" \
@@ -53,5 +54,3 @@ dsc-datatool \
   > "$TMP"
 
 install -m 0644 "$TMP" "$OUT_FILE"
-
-find "$DSC_DIR" -name '*.xml' -mmin +60 -delete
