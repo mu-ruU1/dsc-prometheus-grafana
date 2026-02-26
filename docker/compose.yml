@@ -5,7 +5,7 @@ services:
     ports:
       - ${GRAFANA_PORT:-3000}:3000
     volumes:
-      - grafana_storage:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
       - ./config/grafana/provisioning:/etc/grafana/provisioning
       - ./config/grafana/dashboards:/var/lib/grafana/dashboards
     environment:
@@ -37,8 +37,8 @@ services:
     ports:
       - ${PROMETHEUS_PORT:-9090}:9090
     volumes:
-      - ./config/prometheus/:/etc/prometheus/
       - prometheus-data:/prometheus
+      - ./config/prometheus/:/etc/prometheus/
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--web.config.file=/etc/prometheus/web.yml"
@@ -49,12 +49,16 @@ services:
     container_name: alertmanager
     ports:
       - ${ALERTMANAGER_PORT:-9093}:9093
+      - ${ALERTMANAGER_CLUSTER_PORT:-9094}:9094
     volumes:
-      - ./config/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
       - alertmanager-data:/data
+      - ./config/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command:
+      - "--cluster.listen-address=0.0.0.0:9094"
+      #- "--cluster.peer=peer-address:9094"
     restart: always
 
 volumes:
-  grafana_storage:
+  grafana-data:
   prometheus-data:
   alertmanager-data:

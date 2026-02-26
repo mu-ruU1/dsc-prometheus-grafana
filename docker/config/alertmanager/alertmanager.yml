@@ -1,0 +1,10 @@
+global:
+
+route:
+  receiver:
+  group_wait:
+  group_interval:
+  repeat_interval:
+
+receivers:
+  - name:
