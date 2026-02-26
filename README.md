@@ -2,7 +2,6 @@
 
 ## Setup
 
-
 ### dsc-datatool
 
 ```bash
@@ -12,6 +11,20 @@ python3 -m venv venv --system-site-packages
 . venv/bin/activate
 pip install -r requirements.txt
 pip install -e . --no-deps
+```
+
+## docker
+
+### 環境変数変更後
+
+```bash
+docker compose up -d --force-recreate
+```
+
+### コンテナイメージの更新
+
+```bash
+docker compose up -d --pull always --force-recreate
 ```
 
 ## docs

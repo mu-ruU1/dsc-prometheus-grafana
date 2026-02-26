@@ -52,10 +52,11 @@ services:
       - ${ALERTMANAGER_CLUSTER_PORT:-9094}:9094
     volumes:
       - alertmanager-data:/data
-      - ./config/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - ./config/alertmanager/:/etc/alertmanager/
     command:
       - "--cluster.listen-address=0.0.0.0:9094"
       #- "--cluster.peer=peer-address:9094"
+      - "--web.config.file=/etc/alertmanager/web.yml"
     restart: always
 
 volumes:
