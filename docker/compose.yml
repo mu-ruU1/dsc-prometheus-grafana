@@ -55,7 +55,7 @@ services:
       - ./config/alertmanager/:/etc/alertmanager/
     command:
       - "--cluster.listen-address=0.0.0.0:9094"
-      #- "--cluster.peer=peer-address:9094"
+      #- "--cluster.peer=<peer-address>:9094"
       - "--config.file=/etc/alertmanager/alertmanager.yml"
       - "--web.config.file=/etc/alertmanager/web.yml"
     restart: always

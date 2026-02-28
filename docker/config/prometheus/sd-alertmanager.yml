@@ -1,2 +1,3 @@
 - targets:
     - http://alertmanager:9093
+    #- http://<peer-alertmanager>:9093
