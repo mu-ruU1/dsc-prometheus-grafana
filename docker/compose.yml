@@ -49,12 +49,13 @@ services:
     container_name: alertmanager
     ports:
       - ${ALERTMANAGER_PORT:-9093}:9093
-      - ${ALERTMANAGER_CLUSTER_PORT:-9094}:9094
+      - ${ALERTMANAGER_CLUSTER_PORT:-9094}:9094/tcp
+      - ${ALERTMANAGER_CLUSTER_PORT:-9094}:9094/udp
     volumes:
       - alertmanager-data:/data
       - ./config/alertmanager/:/etc/alertmanager/
     command:
-      - "--cluster.listen-address=0.0.0.0:9094"
+      - "--cluster.listen-address=0.0.0.0:${ALERTMANAGER_CLUSTER_PORT:-9094}"
       #- "--cluster.peer=<peer-address>:9094"
       - "--config.file=/etc/alertmanager/alertmanager.yml"
       - "--web.config.file=/etc/alertmanager/web.yml"
