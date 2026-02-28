@@ -2,6 +2,15 @@
 
 ## Setup
 
+### podman
+
+```bash
+sudo dnf install container-tools podman-tui podman-compose podman-docker -y
+systemctl --user enable --now podman-restart podman.socket
+sudo loginctl enable-linger $USER
+echo "net.ipv4.ip_unprivileged_port_start=80" | sudo tee -a /etc/sysctl.conf
+```
+
 ### dsc-datatool
 
 ```bash
@@ -13,7 +22,7 @@ pip install -r requirements.txt
 pip install -e . --no-deps
 ```
 
-## docker
+## Operation
 
 ### 環境変数変更後
 
@@ -21,7 +30,7 @@ pip install -e . --no-deps
 docker compose up -d --force-recreate
 ```
 
-### コンテナイメージの更新
+### コンテナイメージのバージョンアップ
 
 ```bash
 docker compose up -d --pull always --force-recreate
