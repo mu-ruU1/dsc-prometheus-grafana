@@ -1,0 +1,19 @@
+apiVersion: 1
+
+contactPoints:
+  - name: Alertmanager
+    receivers:
+      - uid: local-alertmanager
+        type: prometheus-alertmanager
+        settings:
+          url: http://alertmanager:9093
+          basicAuthUser: admin
+          basicAuthPassword: password
+        disableResolveMessage: false
+      - uid: peer-alertmanager
+        type: prometheus-alertmanager
+        settings:
+          url: http://<peer-alertmanager>:9093
+          basicAuthUser: admin
+          basicAuthPassword: password
+        disableResolveMessage: false
