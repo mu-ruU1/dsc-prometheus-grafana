@@ -37,7 +37,12 @@ direction_vs_ipproto,\
 dns_ip_version_vs_qtype,\
 response_time,\
 label_count,\
-qr_aa_bits"
+encryption,\
+priming_queries,\
+priming_responses,\
+qr_aa_bits,\
+servfail_qname,\
+ad_qname"
 
 cleanup() {
   rm -f "$TMP"
